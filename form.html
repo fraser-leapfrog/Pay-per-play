@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pay Per Play Application — Leapfrog Advertising</title>
+
+  <!-- Adobe Typekit — Arboria. Replace YOUR_KIT_ID with your Typekit kit ID -->
+  <link rel="stylesheet" href="https://use.typekit.net/YOUR_KIT_ID.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    :root {
+      --purple:    #7209b7;
+      --pink:      #e43f84;
+      --dark:      #070212;
+      --bg:        #f4f4f3;
+      --white:     #ffffff;
+      --border:    #e2e2e1;
+      --muted:     #888;
+      --radius:    12px;
+      --font-ui:   'Space Grotesk', sans-serif;
+      --font-hd:   'arboria', 'Space Grotesk', sans-serif;
+      --grad:      linear-gradient(125deg, var(--purple) 0%, var(--pink) 100%);
+    }
+
+    body {
+      font-family: var(--font-ui);
+      background: var(--bg);
+      color: var(--dark);
+      min-height: 100vh;
+      padding: 52px 16px 96px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .page {
+      max-width: 660px;
+      margin: 0 auto;
+    }
+
+    /* ── Header ── */
+    .site-header {
+      text-align: center;
+      margin-bottom: 40px;
+      opacity: 0;
+      transform: translateY(-10px);
+      animation: fadeUp 0.45s 0.05s forwards;
+    }
+
+    .site-header img {
+      max-width: 200px;
+      height: auto;
+    }
+
+    /* ── Hero band ── */
+    .hero {
+      background: var(--dark);
+      border-radius: var(--radius);
+      padding: 40px 40px 36px;
+      margin-bottom: 20px;
+      position: relative;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(14px);
+      animation: fadeUp 0.5s 0.12s forwards;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 90% 10%, rgba(228,63,132,0.25) 0%, transparent 55%),
+        radial-gradient(ellipse at 5%  90%, rgba(114,9,183,0.30) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .hero-eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      background: var(--grad);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 12px;
+    }
+
+    .hero h1 {
+      font-family: var(--font-hd);
+      font-weight: 700;
+      font-size: clamp(28px, 5.5vw, 42px);
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+      line-height: 1.05;
+      color: var(--white);
+      margin-bottom: 14px;
+    }
+
+    .hero h1 span {
+      background: var(--grad);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      font-size: 15px;
+      color: rgba(255,255,255,0.55);
+      max-width: 460px;
+      line-height: 1.7;
+    }
+
+    /* ── Section label ── */
+    .section-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+      padding-left: 2px;
+    }
+
+    /* ── Card base ── */
+    .card {
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 500px) { .card { padding: 24px 18px; } }
+
+    /* ── Calculator panel ── */
+    .calc-panel {
+      position: relative;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(14px);
+      animation: fadeUp 0.5s 0.22s forwards;
+    }
+
+    .calc-panel::before {
+      content: '';
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 3px;
+      background: var(--grad);
+    }
+
+    .calc-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 26px;
+    }
+
+    .calc-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: var(--grad);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .calc-icon svg {
+      width: 17px; height: 17px;
+      stroke: #fff; stroke-width: 1.8;
+      fill: none; stroke-linecap: round; stroke-linejoin: round;
+    }
+
+    .calc-title {
+      font-family: var(--font-hd);
+      font-weight: 700;
+      font-size: 15px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--dark);
+    }
+
+    .calc-subtitle { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+    /* Screen checkboxes */
+    .screen-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 26px;
+    }
+
+    @media (max-width: 480px) { .screen-grid { grid-template-columns: 1fr; } }
+
+    .screen-option { position: relative; cursor: pointer; }
+
+    .screen-option input[type="checkbox"] {
+      position: absolute; opacity: 0; width: 0; height: 0;
+    }
+
+    .screen-card {
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      background: var(--white);
+      transition: border-color 0.18s, box-shadow 0.18s, background 0.18s;
+      user-select: none;
+    }
+
+    .screen-option:hover .screen-card { border-color: var(--purple); }
+
+    .screen-option input:checked + .screen-card {
+      border-color: var(--purple);
+      background: #faf4ff;
+      box-shadow: 0 0 0 3px rgba(114,9,183,0.10);
+    }
+
+    .screen-check {
+      width: 20px; height: 20px;
+      border: 1.5px solid var(--border);
+      border-radius: 5px;
+      margin-bottom: 10px;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.18s;
+      background: var(--white);
+    }
+
+    .screen-option input:checked + .screen-card .screen-check {
+      background: var(--grad);
+      border-color: transparent;
+    }
+
+    .screen-check svg {
+      width: 11px; height: 11px;
+      stroke: #fff; stroke-width: 2.5; fill: none;
+      opacity: 0; transition: opacity 0.18s;
+    }
+
+    .screen-option input:checked + .screen-card .screen-check svg { opacity: 1; }
+
+    .screen-name { font-size: 13px; font-weight: 600; color: var(--dark); line-height: 1.3; }
+    .screen-location { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+    .screen-price {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--pink);
+      margin-top: 8px;
+    }
+
+    /* Budget input */
+    .budget-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .budget-prefix {
+      font-size: 24px;
+      font-weight: 500;
+      color: var(--purple);
+      flex-shrink: 0;
+    }
+
+    .budget-input-wrap { flex: 1; }
+
+    .budget-input-wrap input[type="number"] {
+      width: 100%;
+      font-family: var(--font-ui);
+      font-size: 28px;
+      font-weight: 600;
+      color: var(--dark);
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid var(--border);
+      border-radius: 0;
+      padding: 4px 0 8px;
+      outline: none;
+      transition: border-color 0.18s;
+      -moz-appearance: textfield;
+    }
+
+    .budget-input-wrap input[type="number"]::-webkit-inner-spin-button,
+    .budget-input-wrap input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
+
+    .budget-input-wrap input[type="number"]:focus { border-bottom-color: var(--purple); }
+
+    .budget-slider {
+      width: 100%;
+      margin: 0 0 28px;
+      -webkit-appearance: none; appearance: none;
+      height: 4px; border-radius: 2px;
+      background: linear-gradient(to right, var(--purple) 0%, var(--purple) 10%, #e8d5f5 10%, #e8d5f5 100%);
+      outline: none; cursor: pointer;
+    }
+
+    .budget-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 20px; height: 20px; border-radius: 50%;
+      background: var(--purple); cursor: pointer;
+      box-shadow: 0 1px 6px rgba(114,9,183,0.4);
+      transition: transform 0.15s;
+    }
+
+    .budget-slider::-webkit-slider-thumb:hover { transform: scale(1.18); }
+    .budget-slider::-moz-range-thumb {
+      width: 20px; height: 20px; border-radius: 50%;
+      background: var(--purple); border: none;
+    }
+
+    /* Plays output */
+    .plays-output {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 14px;
+      min-height: 80px;
+    }
+
+    @media (max-width: 480px) { .plays-output { grid-template-columns: 1fr; } }
+
+    .plays-card {
+      background: var(--dark);
+      border-radius: 10px;
+      padding: 20px 16px;
+      display: none;
+      transition: opacity 0.2s;
+    }
+
+    .plays-card.visible { display: block; }
+
+    .plays-num {
+      font-family: var(--font-hd);
+      font-weight: 700;
+      font-size: clamp(30px, 5.5vw, 42px);
+      line-height: 1;
+      margin-bottom: 6px;
+      background: linear-gradient(130deg, #c77dff 10%, var(--pink) 90%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .plays-label { font-size: 12px; color: rgba(255,255,255,0.55); line-height: 1.45; }
+    .plays-sublabel { font-size: 11px; color: rgba(255,255,255,0.35); margin-top: 4px; }
+
+    .plays-empty {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 24px 0;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .plays-summary {
+      background: #f3e8fb;
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 13px;
+      color: var(--purple);
+      font-weight: 500;
+      line-height: 1.6;
+      display: none;
+      margin-bottom: 10px;
+    }
+
+    .plays-summary.visible { display: block; }
+
+    .spread-note {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* ── Form card ── */
+    .form-card {
+      opacity: 0;
+      transform: translateY(14px);
+      animation: fadeUp 0.5s 0.32s forwards;
+    }
+
+    .form-section-title {
+      font-family: var(--font-hd);
+      font-weight: 700;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: var(--dark);
+      margin-bottom: 22px;
+    }
+
+    .field-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    @media (max-width: 500px) { .field-row { grid-template-columns: 1fr; gap: 12px; } }
+
+    .field-full { margin-bottom: 16px; }
+
+    .field-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      color: #444;
+      margin-bottom: 6px;
+    }
+
+    .field-label .req { color: var(--pink); margin-left: 2px; }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="url"],
+    select, textarea {
+      width: 100%;
+      font-family: var(--font-ui);
+      font-size: 14px;
+      color: var(--dark);
+      background: var(--bg);
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      padding: 11px 14px;
+      outline: none;
+      transition: border-color 0.18s, box-shadow 0.18s, background 0.18s;
+      appearance: none; -webkit-appearance: none;
+    }
+
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    input[type="tel"]:focus,
+    input[type="url"]:focus,
+    select:focus, textarea:focus {
+      border-color: var(--purple);
+      background: var(--white);
+      box-shadow: 0 0 0 3px rgba(114,9,183,0.09);
+    }
+
+    input[type="text"].error,
+    input[type="email"].error { border-color: var(--pink); }
+
+    input::placeholder, textarea::placeholder { color: #ccc; }
+
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M1 1L6 6L11 1' stroke='%237209b7' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 38px;
+      cursor: pointer;
+    }
+
+    textarea { resize: vertical; min-height: 96px; }
+
+    .form-divider {
+      border: none;
+      border-top: 1px solid #f0f0f0;
+      margin: 24px 0;
+    }
+
+    /* Opt-in checkbox */
+    .optin-label {
+      display: flex; align-items: flex-start;
+      gap: 12px; cursor: pointer; margin-bottom: 16px;
+    }
+
+    .optin-label input[type="checkbox"] {
+      position: absolute; opacity: 0; width: 0; height: 0;
+    }
+
+    .custom-cb {
+      width: 20px; height: 20px; min-width: 20px;
+      border: 1.5px solid var(--border);
+      border-radius: 5px;
+      background: var(--bg);
+      display: flex; align-items: center; justify-content: center;
+      margin-top: 1px; flex-shrink: 0;
+      transition: all 0.18s;
+    }
+
+    .optin-label input:checked + .custom-cb {
+      background: var(--grad);
+      border-color: transparent;
+    }
+
+    .custom-cb svg {
+      width: 11px; height: 11px;
+      stroke: #fff; stroke-width: 2.5; fill: none;
+      opacity: 0; transition: opacity 0.18s;
+    }
+
+    .optin-label input:checked + .custom-cb svg { opacity: 1; }
+
+    .optin-text { font-size: 13px; color: #555; line-height: 1.55; }
+
+    /* Privacy */
+    .privacy-note {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    .privacy-note a { color: var(--purple); text-decoration: underline; }
+
+    /* Error banner */
+    .error-banner {
+      display: none;
+      background: #fff0f5;
+      border: 1px solid #f5a7c5;
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 13px;
+      color: #a0103d;
+      margin-bottom: 16px;
+    }
+
+    /* Submit button */
+    .submit-btn {
+      width: 100%;
+      font-family: var(--font-ui);
+      font-size: 15px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #fff;
+      background: var(--grad);
+      border: none;
+      border-radius: 8px;
+      padding: 16px 24px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      transition: opacity 0.18s, transform 0.12s;
+    }
+
+    .submit-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+    .submit-btn:active { transform: translateY(0); }
+    .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+    .submit-btn svg {
+      width: 16px; height: 16px; stroke: currentColor; stroke-width: 2;
+      fill: none; stroke-linecap: round; stroke-linejoin: round;
+      transition: transform 0.15s;
+    }
+
+    .submit-btn:hover svg { transform: translateX(3px); }
+
+    .spinner {
+      width: 16px; height: 16px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+      display: none;
+    }
+
+    .submit-btn.loading .spinner { display: block; }
+    .submit-btn.loading .btn-text { opacity: 0.7; }
+    .submit-btn.loading .btn-arrow { display: none; }
+
+    /* Success */
+    .success-state {
+      display: none;
+      text-align: center;
+      padding: 48px 24px;
+      animation: fadeUp 0.4s forwards;
+    }
+
+    .success-icon {
+      width: 64px; height: 64px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(114,9,183,0.12), rgba(228,63,132,0.12));
+      margin: 0 auto 20px;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .success-icon svg {
+      width: 28px; height: 28px;
+      stroke: var(--purple); stroke-width: 2.5; fill: none;
+    }
+
+    .success-state h2 {
+      font-family: var(--font-hd);
+      font-weight: 700;
+      font-size: 22px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--dark);
+      margin-bottom: 10px;
+    }
+
+    .success-state p { font-size: 14px; color: var(--muted); max-width: 360px; margin: 0 auto; line-height: 1.65; }
+
+    /* Footer */
+    .page-footer {
+      text-align: center;
+      margin-top: 28px;
+      font-size: 12px;
+      color: var(--muted);
+      opacity: 0;
+      animation: fadeUp 0.5s 0.5s forwards;
+      line-height: 1.7;
+    }
+
+    .page-footer a { color: var(--purple); text-decoration: none; }
+    .page-footer a:hover { text-decoration: underline; }
+
+    /* Animations */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @keyframes numPop {
+      0%   { transform: scale(0.92); opacity: 0.4; }
+      60%  { transform: scale(1.04); }
+      100% { transform: scale(1);    opacity: 1; }
+    }
+
+    .num-pop { animation: numPop 0.3s ease forwards; }
+  </style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- Header -->
+  <header class="site-header">
+    <img
+      src="https://images.squarespace-cdn.com/content/v1/67e435a9add09975846d9818/e2f423be-5ba7-45c5-b5f7-c992d4324256/Leapfrog-Advertising-Full-Colour-01.png"
+      alt="Leapfrog Advertising"
+      onerror="this.style.display='none'"
+    >
+  </header>
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-eyebrow">Pay Per Play</div>
+    <h1><span>Pay Per Play</span><br>Application</h1>
+    <p>Set your budget, choose your screen, and see exactly how many times your ad will play — before you commit to a thing.</p>
+  </div>
+
+  <!-- Calculator -->
+  <div class="section-label">Step 1 — Build your campaign</div>
+  <div class="card calc-panel">
+
+    <div class="calc-head">
+      <div class="calc-icon">
+        <svg viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M9 7h6M9 12h6M9 17h4"/></svg>
+      </div>
+      <div>
+        <div class="calc-title">Plays Calculator</div>
+        <div class="calc-subtitle">Updates live as you adjust your budget</div>
+      </div>
+    </div>
+
+    <div class="section-label" style="margin-bottom:10px">Choose your screen(s)</div>
+
+    <div class="screen-grid">
+      <label class="screen-option">
+        <input type="checkbox" id="screen-quadrant" onchange="updateCalc()">
+        <div class="screen-card">
+          <div class="screen-check">
+            <svg viewBox="0 0 12 9"><polyline points="1.5 4.5 4.5 7.5 10.5 1.5"/></svg>
+          </div>
+          <div class="screen-name">The Quadrant LED Wall</div>
+          <div class="screen-location">Quadrant Shopping Centre, Swansea</div>
+          <div class="screen-price">£0.52 per play</div>
+        </div>
+      </label>
+      <label class="screen-option">
+        <input type="checkbox" id="screen-parctawe" onchange="updateCalc()">
+        <div class="screen-card">
+          <div class="screen-check">
+            <svg viewBox="0 0 12 9"><polyline points="1.5 4.5 4.5 7.5 10.5 1.5"/></svg>
+          </div>
+          <div class="screen-name">Parc Tawe D6 Screens ×2</div>
+          <div class="screen-location">Parc Tawe Retail Park, Swansea</div>
+          <div class="screen-price">£0.16 per play</div>
+        </div>
+      </label>
+    </div>
+
+    <div class="section-label" style="margin-bottom:8px">Your total budget</div>
+    <div class="budget-row">
+      <span class="budget-prefix">£</span>
+      <div class="budget-input-wrap">
+        <input
+          type="number"
+          id="budget-number"
+          min="50" max="50000"
+          placeholder="e.g. 500"
+          oninput="syncFromNumber()"
+        >
+      </div>
+    </div>
+    <input
+      type="range"
+      class="budget-slider"
+      id="budget-slider"
+      min="50" max="1500" step="50" value="100"
+      oninput="syncFromSlider()"
+    >
+
+    <!-- Output cards -->
+    <div class="plays-output" id="plays-output">
+      <div class="plays-empty" id="plays-empty">Select a screen above to see your estimated plays.</div>
+      <div class="plays-card" id="card-quadrant">
+        <div class="plays-num" id="num-quadrant">—</div>
+        <div class="plays-label">plays on The Quadrant LED Wall</div>
+        <div class="plays-sublabel" id="sub-quadrant">@ £0.52 per play</div>
+      </div>
+      <div class="plays-card" id="card-parctawe">
+        <div class="plays-num" id="num-parctawe">—</div>
+        <div class="plays-label">plays on Parc Tawe D6 Screens</div>
+        <div class="plays-sublabel" id="sub-parctawe">@ £0.16 per play</div>
+      </div>
+    </div>
+
+    <div class="plays-summary" id="plays-summary"></div>
+    <p class="spread-note">Plays are spread evenly across your chosen timeframe.</p>
+
+  </div>
+
+  <!-- Form -->
+  <div class="section-label">Step 2 — Tell us about your campaign</div>
+  <div class="card form-card">
+
+    <div class="form-section-title">Your Details</div>
+    <div class="error-banner" id="error-banner"></div>
+
+    <form id="application-form" novalidate>
+
+      <div class="field-row">
+        <div>
+          <label class="field-label" for="first-name">First name <span class="req">*</span></label>
+          <input type="text" id="first-name" name="firstname" placeholder="e.g. Alex" required>
+        </div>
+        <div>
+          <label class="field-label" for="last-name">Last name <span class="req">*</span></label>
+          <input type="text" id="last-name" name="lastname" placeholder="e.g. Williams" required>
+        </div>
+      </div>
+
+      <div class="field-full">
+        <label class="field-label" for="business-name">Business name <span class="req">*</span></label>
+        <input type="text" id="business-name" name="company" placeholder="e.g. Coastal Coffee Co." required>
+      </div>
+
+      <div class="field-full">
+        <label class="field-label" for="email">Email address <span class="req">*</span></label>
+        <input type="email" id="email" name="email" placeholder="you@yourbusiness.com" required>
+      </div>
+
+      <div class="field-row">
+        <div>
+          <label class="field-label" for="phone">Phone number</label>
+          <input type="tel" id="phone" name="phone" placeholder="07700 000000">
+        </div>
+        <div>
+          <label class="field-label" for="website">Website</label>
+          <input type="url" id="website" name="website" placeholder="https://">
+        </div>
+      </div>
+
+      <hr class="form-divider">
+
+      <div class="field-row">
+        <div>
+          <label class="field-label" for="start-date">Campaign start date</label>
+          <input type="date" id="start-date" name="start_date" onchange="updateCalc()">
+        </div>
+        <div>
+          <label class="field-label" for="end-date">Campaign end date</label>
+          <input type="date" id="end-date" name="end_date" onchange="updateCalc()">
+        </div>
+      </div>
+
+      <div class="field-full">
+        <label class="field-label" for="creative-status">Ad creative status</label>
+        <select id="creative-status" name="ad_creative_status">
+          <option value="" disabled selected>Select an option</option>
+          <option value="ready">I have a ready-made ad</option>
+          <option value="help">I need help creating one</option>
+          <option value="unsure">Not sure yet</option>
+        </select>
+      </div>
+
+      <div class="field-full">
+        <label class="field-label" for="notes">Any additional information</label>
+        <textarea id="notes" name="notes" placeholder="Tell us about your campaign goals, target audience, or any questions you have…"></textarea>
+      </div>
+
+      <hr class="form-divider">
+
+      <label class="optin-label">
+        <input type="checkbox" id="marketing-optin" name="marketing_optin">
+        <span class="custom-cb">
+          <svg viewBox="0 0 12 9"><polyline points="1.5 4.5 4.5 7.5 10.5 1.5"/></svg>
+        </span>
+        <span class="optin-text">I'd like to receive advertising tips, updates and offers from Leapfrog Advertising by email.</span>
+      </label>
+
+      <p class="privacy-note">
+        By submitting this form you agree to our <a href="https://www.leapfrogadvertising.com/privacy-policy" target="_blank" rel="noopener">Privacy Policy</a>. Your information will only be used to review your application and, if you've opted in, to send you relevant communications.
+      </p>
+
+      <button type="submit" class="submit-btn" id="submit-btn">
+        <div class="spinner"></div>
+        <span class="btn-text">Submit Application</span>
+        <svg class="btn-arrow" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+
+    </form>
+
+    <div class="success-state" id="success-state">
+      <div class="success-icon">
+        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h2>Application Received</h2>
+      <p>Thank you — your application has been received. We'll review it and be in touch within 1 working day.</p>
+    </div>
+
+  </div>
+
+  <footer class="page-footer">
+    <p>
+      <a href="https://www.leapfrogadvertising.com" target="_blank" rel="noopener">leapfrogadvertising.com</a>
+      &nbsp;·&nbsp;
+      <a href="mailto:hello@leapfrogadvertising.com">hello@leapfrogadvertising.com</a>
+    </p>
+    <p style="margin-top:4px;color:#bbb">only great locations. accessible for all businesses.</p>
+  </footer>
+
+</div>
+
+<script>
+  /* ── Pricing ── */
+  const RATE_Q  = 0.52;
+  const RATE_PT = 0.16;
+
+  function campaignDays() {
+    const s = document.getElementById('start-date').value;
+    const e = document.getElementById('end-date').value;
+    if (!s || !e) return 30;
+    const diff = (new Date(e) - new Date(s)) / (1000 * 60 * 60 * 24);
+    return diff > 0 ? Math.round(diff) : 30;
+  }
+
+  function campaignLabel() {
+    const s = document.getElementById('start-date').value;
+    const e = document.getElementById('end-date').value;
+    if (!s || !e) return '30 days';
+    const days = campaignDays();
+    return `${days} day${days !== 1 ? 's' : ''}`;
+  }
+
+  /* ── Slider ↔ number sync ── */
+  function syncFromSlider() {
+    const v = document.getElementById('budget-slider').value;
+    document.getElementById('budget-number').value = v;
+    updateSliderTrack(v);
+    updateCalc();
+  }
+
+  function syncFromNumber() {
+    const raw     = parseFloat(document.getElementById('budget-number').value) || 0;
+    const clamped = Math.min(Math.max(raw, 50), 1500);
+    document.getElementById('budget-slider').value = clamped;
+    updateSliderTrack(clamped);
+    updateCalc();
+  }
+
+  function updateSliderTrack(val) {
+    const pct = ((val - 50) / (1500 - 50)) * 100;
+    document.getElementById('budget-slider').style.background =
+      `linear-gradient(to right, #7209b7 0%, #7209b7 ${pct}%, #e8d5f5 ${pct}%, #e8d5f5 100%)`;
+  }
+
+  /* ── Calculator ── */
+  function updateCalc() {
+    const q   = document.getElementById('screen-quadrant').checked;
+    const pt  = document.getElementById('screen-parctawe').checked;
+    const b   = parseFloat(document.getElementById('budget-number').value) || 0;
+    const days = campaignDays();
+
+    const cardQ  = document.getElementById('card-quadrant');
+    const cardPT = document.getElementById('card-parctawe');
+    const numQ   = document.getElementById('num-quadrant');
+    const numPT  = document.getElementById('num-parctawe');
+    const subQ   = document.getElementById('sub-quadrant');
+    const subPT  = document.getElementById('sub-parctawe');
+    const empty  = document.getElementById('plays-empty');
+    const sumEl  = document.getElementById('plays-summary');
+
+    const none = !q && !pt;
+    empty.style.display = none ? 'block' : 'none';
+
+    const both = q && pt;
+
+    if (q) {
+      cardQ.classList.add('visible');
+      const qBudget = both ? b / 2 : b;
+      const qPlays  = b > 0 ? Math.floor(qBudget / RATE_Q) : 0;
+      const qPD     = days > 0 ? Math.floor(qPlays / days) : 0;
+      setNum(numQ, b > 0 ? qPlays.toLocaleString('en-GB') : '—');
+      subQ.textContent = b > 0 ? `≈ ${qPD.toLocaleString('en-GB')} plays/day · £0.52 per play` : '£0.52 per play';
+    } else {
+      cardQ.classList.remove('visible');
+    }
+
+    if (pt) {
+      cardPT.classList.add('visible');
+      const ptBudget = both ? b / 2 : b;
+      const ptPlays  = b > 0 ? Math.floor(ptBudget / RATE_PT) : 0;
+      const ptPD     = days > 0 ? Math.floor(ptPlays / days) : 0;
+      setNum(numPT, b > 0 ? ptPlays.toLocaleString('en-GB') : '—');
+      subPT.textContent = b > 0 ? `≈ ${ptPD.toLocaleString('en-GB')} plays/day · £0.16 per play` : '£0.16 per play';
+    } else {
+      cardPT.classList.remove('visible');
+    }
+
+    /* Summary sentence */
+    if (b > 0 && !none) {
+      const tf = campaignLabel();
+      let msg = '';
+      if (both) {
+        const qP  = Math.floor((b / 2) / RATE_Q);
+        const ptP = Math.floor((b / 2) / RATE_PT);
+        msg = `With a £${b.toLocaleString('en-GB')} budget split across both screens over ${tf}, your ad plays ${qP.toLocaleString('en-GB')} times at The Quadrant and ${ptP.toLocaleString('en-GB')} times at Parc Tawe.`;
+      } else if (q) {
+        const plays = Math.floor(b / RATE_Q);
+        const pd    = Math.floor(plays / days);
+        msg = `With a £${b.toLocaleString('en-GB')} budget over ${tf}, your ad plays ${plays.toLocaleString('en-GB')} times on The Quadrant LED Wall — roughly ${pd.toLocaleString('en-GB')} plays per day.`;
+      } else {
+        const plays = Math.floor(b / RATE_PT);
+        const pd    = Math.floor(plays / days);
+        msg = `With a £${b.toLocaleString('en-GB')} budget over ${tf}, your ad plays ${plays.toLocaleString('en-GB')} times across the Parc Tawe D6 Screens — roughly ${pd.toLocaleString('en-GB')} plays per day.`;
+      }
+      sumEl.textContent = msg;
+      sumEl.classList.add('visible');
+    } else {
+      sumEl.classList.remove('visible');
+    }
+  }
+
+  function setNum(el, val) {
+    if (el.textContent === val) return;
+    el.classList.remove('num-pop');
+    void el.offsetWidth;
+    el.textContent = val;
+    el.classList.add('num-pop');
+  }
+
+  /* ── Form submission ── */
+  document.getElementById('application-form').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const form      = this;
+    const btn       = document.getElementById('submit-btn');
+    const errBanner = document.getElementById('error-banner');
+
+    /* Validation */
+    const required = form.querySelectorAll('[required]');
+    let invalid = false;
+    required.forEach(el => {
+      if (!el.value.trim()) {
+        el.classList.add('error');
+        invalid = true;
+      } else {
+        el.classList.remove('error');
+      }
+    });
+
+    if (invalid) {
+      errBanner.textContent = 'Please fill in all required fields before submitting.';
+      errBanner.style.display = 'block';
+      errBanner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+
+    errBanner.style.display = 'none';
+
+    const screens = [];
+    if (document.getElementById('screen-quadrant').checked) screens.push('The Quadrant LED Wall');
+    if (document.getElementById('screen-parctawe').checked) screens.push('Parc Tawe D6 Screens ×2');
+
+    const payload = {
+      firstname:          document.getElementById('first-name').value.trim(),
+      lastname:           document.getElementById('last-name').value.trim(),
+      company:            document.getElementById('business-name').value.trim(),
+      email:              document.getElementById('email').value.trim(),
+      phone:              document.getElementById('phone').value.trim(),
+      website:            document.getElementById('website').value.trim(),
+      start_date:         document.getElementById('start-date').value,
+      end_date:           document.getElementById('end-date').value,
+      campaign_days:      campaignDays(),
+      ad_creative_status: document.getElementById('creative-status').value,
+      notes:              document.getElementById('notes').value.trim(),
+      selected_screens:   screens.join(', '),
+      budget:             parseFloat(document.getElementById('budget-number').value) || 0,
+      plays_summary:      document.getElementById('plays-summary').textContent,
+      marketing_optin:    document.getElementById('marketing-optin').checked,
+    };
+
+    btn.classList.add('loading');
+    btn.querySelector('.btn-text').textContent = 'Submitting…';
+    btn.disabled = true;
+
+    try {
+      const res  = await fetch('/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (res.ok && data.success !== false) {
+        form.style.display = 'none';
+        document.getElementById('success-state').style.display = 'block';
+      } else {
+        throw new Error(data.error || 'Something went wrong. Please try again.');
+      }
+    } catch (err) {
+      errBanner.textContent = err.message || 'Something went wrong. Please try again.';
+      errBanner.style.display = 'block';
+      errBanner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      btn.classList.remove('loading');
+      btn.querySelector('.btn-text').textContent = 'Submit Application';
+      btn.disabled = false;
+    }
+  });
+
+  /* Clear error state on input */
+  document.querySelectorAll('input[required]').forEach(f => {
+    f.addEventListener('input', () => f.classList.remove('error'));
+  });
+
+  /* Init slider track */
+  updateSliderTrack(100);
+</script>
+
+</body>
+</html>
