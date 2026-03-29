@@ -1,7 +1,6 @@
 require('dotenv').config();
-const express  = require('express');
-const nodemailer = require('nodemailer');
-const path     = require('path');
+const express = require('express');
+const path    = require('path');
 
 const app  = express();
 const PORT = process.env.PORT || 3000;
@@ -28,16 +27,30 @@ app.use((req, res, next) => {
   next();
 });
 
-// ── Mailer setup ──────────────────────────────────────────────────────────────
-const transporter = nodemailer.createTransport({
-  host:   process.env.SMTP_HOST || 'smtp.gmail.com',
-  port:   parseInt(process.env.SMTP_PORT || '587'),
-  secure: process.env.SMTP_PORT === '465',
-  auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS,
-  },
-});
+// ── Send email via Resend API (HTTPS — works on all cloud hosts) ──────────────
+async function sendEmail({ to, replyTo, subject, html }) {
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) throw new Error('RESEND_API_KEY environment variable is not set');
+
+  const res = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${apiKey}`,
+      'Content-Type':  'application/json',
+    },
+    body: JSON.stringify({
+      from:     'Leapfrog Form <form@leapfrogadvertising.com>',
+      to:       [to],
+      reply_to: replyTo,
+      subject,
+      html,
+    }),
+  });
+
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || `Resend error: ${res.status}`);
+  return data;
+}
 
 // ── Routes ────────────────────────────────────────────────────────────────────
 
@@ -186,19 +199,18 @@ app.post('/submit', async (req, res) => {
 
   </div>
   <div class="footer">
-    Submitted via <a href="https://form.leapfrogadvertising.com">form.leapfrogadvertising.com</a>
+    Submitted via <a href="https://payperplay.leapfrogadvertising.com">payperplay.leapfrogadvertising.com</a>
     &nbsp;·&nbsp; Reply directly to ${email} to respond
   </div>
 </div>
 </body>
 </html>`;
 
-    await transporter.sendMail({
-      from:     `"Leapfrog Form" <${process.env.SMTP_USER}>`,
-      to:       'hello@leapfrogadvertising.com',
-      replyTo:  email,
-      subject:  `New Pay Per Play Application — ${firstname} ${lastname} (${company})`,
-      html:     htmlBody,
+    await sendEmail({
+      to:      'hello@leapfrogadvertising.com',
+      replyTo: email,
+      subject: `New Pay Per Play Application — ${firstname} ${lastname} (${company})`,
+      html:    htmlBody,
     });
 
     console.log(`[submit] Email sent for ${email}`);
@@ -213,9 +225,9 @@ app.post('/submit', async (req, res) => {
 // ── Start ─────────────────────────────────────────────────────────────────────
 app.listen(PORT, () => {
   console.log(`Leapfrog form server running at http://localhost:${PORT}`);
-  if (process.env.SMTP_USER) {
-    console.log(`Mailer configured: ${process.env.SMTP_USER}`);
+  if (process.env.RESEND_API_KEY) {
+    console.log('Resend API key loaded ✓');
   } else {
-    console.warn('WARNING: SMTP_USER not set — emails will not send');
+    console.warn('WARNING: RESEND_API_KEY is not set — emails will not send');
   }
 });
