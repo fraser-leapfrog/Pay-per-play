@@ -1,4 +1,5 @@
 require('dotenv').config();
+console.log('ENV KEYS WITH RESEND:', Object.keys(process.env).filter(k => k.includes('RESEND')));
 const express = require('express');
 const path    = require('path');
 
