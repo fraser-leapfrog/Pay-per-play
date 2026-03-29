@@ -28,13 +28,16 @@ app.use((req, res, next) => {
 });
 
 // ── Config ──────────────────────────────────────────────────────────────────
-const HUBSPOT_TOKEN       = process.env.HUBSPOT_API_KEY;
-const SUBSCRIPTION_ID     = process.env.HUBSPOT_SUBSCRIPTION_ID; // set in .env
-const HS_BASE             = 'https://api.hubapi.com';
+const SUBSCRIPTION_ID = process.env.HUBSPOT_SUBSCRIPTION_ID;
+const HS_BASE         = 'https://api.hubapi.com';
 
 function hsHeaders() {
+  const token = process.env.HUBSPOT_API_KEY;
+  if (!token) {
+    throw new Error('HUBSPOT_API_KEY environment variable is not set');
+  }
   return {
-    'Authorization': `Bearer ${HUBSPOT_TOKEN}`,
+    'Authorization': `Bearer ${token}`,
     'Content-Type':  'application/json',
   };
 }
@@ -203,4 +206,10 @@ function formatDateRange(start, end) {
 // ── Start ─────────────────────────────────────────────────────────────────────
 app.listen(PORT, () => {
   console.log(`Leapfrog form server running at http://localhost:${PORT}`);
+  const token = process.env.HUBSPOT_API_KEY;
+  if (token) {
+    console.log(`HubSpot token loaded: ${token.slice(0, 12)}...`);
+  } else {
+    console.error('WARNING: HUBSPOT_API_KEY is not set — HubSpot calls will fail');
+  }
 });

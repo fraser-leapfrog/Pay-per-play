@@ -425,6 +425,7 @@
     input[type="email"],
     input[type="tel"],
     input[type="url"],
+    input[type="date"],
     select, textarea {
       width: 100%;
       font-family: var(--font-ui);
@@ -439,10 +440,13 @@
       appearance: none; -webkit-appearance: none;
     }
 
+    input[type="date"] { cursor: pointer; }
+
     input[type="text"]:focus,
     input[type="email"]:focus,
     input[type="tel"]:focus,
     input[type="url"]:focus,
+    input[type="date"]:focus,
     select:focus, textarea:focus {
       border-color: var(--purple);
       background: var(--white);
@@ -702,7 +706,7 @@
         <input
           type="number"
           id="budget-number"
-          min="50" max="50000"
+          min="50" max="1500"
           placeholder="e.g. 500"
           oninput="syncFromNumber()"
         >
