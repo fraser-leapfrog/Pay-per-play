@@ -29,6 +29,19 @@
       --font-hd:   'arboria', 'Space Grotesk', sans-serif;
       --grad:      linear-gradient(125deg, var(--purple) 0%, var(--pink) 100%);
     }
+    <script>
+  function sendHeight() {
+    window.parent.postMessage(
+      { type: 'leapfrog-resize', height: document.body.scrollHeight },
+      '*'
+    );
+  }
+  window.addEventListener('load', sendHeight);
+  window.addEventListener('resize', sendHeight);
+  new MutationObserver(sendHeight).observe(document.body, {
+    childList: true, subtree: true, attributes: true
+  });
+</script>
 
     body {
       font-family: var(--font-ui);
