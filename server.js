@@ -30,7 +30,7 @@ app.use((req, res, next) => {
 
 // ── Mailer setup ──────────────────────────────────────────────────────────────
 const transporter = nodemailer.createTransport({
-  host:   process.env.SMTP_HOST,
+  host:   process.env.SMTP_HOST || 'smtp.gmail.com',
   port:   parseInt(process.env.SMTP_PORT || '587'),
   secure: process.env.SMTP_PORT === '465',
   auth: {
