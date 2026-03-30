@@ -39,7 +39,7 @@ async function sendEmail({ to, replyTo, subject, html }) {
       'Content-Type':  'application/json',
     },
     body: JSON.stringify({
-      from:     'Leapfrog Form <onboarding@resend.dev>',
+      from:     'Leapfrog Form <form@leapfrogadvertising.com>',
       to:       [to],
       reply_to: replyTo,
       subject,
