@@ -1,5 +1,4 @@
 require('dotenv').config();
-console.log('ENV KEYS WITH RESEND:', Object.keys(process.env).filter(k => k.includes('RESEND')));
 const express = require('express');
 const path    = require('path');
 
@@ -40,7 +39,7 @@ async function sendEmail({ to, replyTo, subject, html }) {
       'Content-Type':  'application/json',
     },
     body: JSON.stringify({
-      from:     'Leapfrog Form <form@leapfrogadvertising.com>',
+      from:     'Leapfrog Form <onboarding@resend.dev>',
       to:       [to],
       reply_to: replyTo,
       subject,
