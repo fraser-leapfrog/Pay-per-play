@@ -7,6 +7,14 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
+// ── Force HTTPS ───────────────────────────────────────────────────────────────
+app.use((req, res, next) => {
+  if (req.headers['x-forwarded-proto'] === 'http') {
+    return res.redirect(301, 'https://' + req.headers.host + req.url);
+  }
+  next();
+});
+
 // ── CORS + iframe headers ─────────────────────────────────────────────────────
 const ALLOWED_ORIGINS = [
   'https://leapfrogadvertising.com',
