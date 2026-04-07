@@ -672,6 +672,17 @@
       </div>
     </div>
 
+    <div class="field-row" style="margin-bottom:20px">
+      <div>
+        <label class="field-label" for="start-date">Campaign start date</label>
+        <input type="date" id="start-date" name="start_date" onchange="updateCalc()">
+      </div>
+      <div>
+        <label class="field-label" for="end-date">Campaign end date</label>
+        <input type="date" id="end-date" name="end_date" onchange="updateCalc()">
+      </div>
+    </div>
+
     <div class="section-label" style="margin-bottom:10px">Choose your screen(s)</div>
 
     <div class="screen-grid">
@@ -694,7 +705,7 @@
           </div>
           <div class="screen-name">Parc Tawe D6 Screens ×2</div>
           <div class="screen-location">Parc Tawe Retail Park, Swansea</div>
-          <div class="screen-price">£0.16 per play</div>
+          <div class="screen-price">£0.16 per play (both screens)</div>
         </div>
       </label>
     </div>
@@ -783,16 +794,6 @@
 
       <hr class="form-divider">
 
-      <div class="field-row">
-        <div>
-          <label class="field-label" for="start-date">Campaign start date</label>
-          <input type="date" id="start-date" name="start_date" onchange="updateCalc()">
-        </div>
-        <div>
-          <label class="field-label" for="end-date">Campaign end date</label>
-          <input type="date" id="end-date" name="end_date" onchange="updateCalc()">
-        </div>
-      </div>
 
       <div class="field-full">
         <label class="field-label" for="creative-status">Ad creative status</label>
@@ -922,7 +923,7 @@
       const qPlays  = b > 0 ? Math.floor(qBudget / RATE_Q) : 0;
       const qPD     = days > 0 ? Math.floor(qPlays / days) : 0;
       setNum(numQ, b > 0 ? qPlays.toLocaleString('en-GB') : '—');
-      subQ.textContent = b > 0 ? `≈ ${qPD.toLocaleString('en-GB')} plays/day · £0.52 per play` : '£0.52 per play';
+      subQ.textContent = b > 0 ? `≈ ${qPD.toLocaleString('en-GB')} plays/day (during opening hours) · £0.52 per play` : '£0.52 per play · during opening hours';
     } else {
       cardQ.classList.remove('visible');
     }
@@ -933,7 +934,7 @@
       const ptPlays  = b > 0 ? Math.floor(ptBudget / RATE_PT) : 0;
       const ptPD     = days > 0 ? Math.floor(ptPlays / days) : 0;
       setNum(numPT, b > 0 ? ptPlays.toLocaleString('en-GB') : '—');
-      subPT.textContent = b > 0 ? `≈ ${ptPD.toLocaleString('en-GB')} plays/day · £0.16 per play` : '£0.16 per play';
+      subPT.textContent = b > 0 ? `≈ ${ptPD.toLocaleString('en-GB')} plays/day (during opening hours) · £0.16 per play (both screens)` : '£0.16 per play (both screens) · during opening hours';
     } else {
       cardPT.classList.remove('visible');
     }
@@ -945,15 +946,15 @@
       if (both) {
         const qP  = Math.floor((b / 2) / RATE_Q);
         const ptP = Math.floor((b / 2) / RATE_PT);
-        msg = `With a £${b.toLocaleString('en-GB')} budget split across both screens over ${tf}, your ad plays ${qP.toLocaleString('en-GB')} times at The Quadrant and ${ptP.toLocaleString('en-GB')} times at Parc Tawe.`;
+        msg = `With a £${b.toLocaleString('en-GB')} budget split across both screens over ${tf}, your ad plays ${qP.toLocaleString('en-GB')} times at The Quadrant (during opening hours) and ${ptP.toLocaleString('en-GB')} times across both Parc Tawe screens (during opening hours).`;
       } else if (q) {
         const plays = Math.floor(b / RATE_Q);
         const pd    = Math.floor(plays / days);
-        msg = `With a £${b.toLocaleString('en-GB')} budget over ${tf}, your ad plays ${plays.toLocaleString('en-GB')} times on The Quadrant LED Wall — roughly ${pd.toLocaleString('en-GB')} plays per day.`;
+        msg = `With a £${b.toLocaleString('en-GB')} budget over ${tf}, your ad plays ${plays.toLocaleString('en-GB')} times on The Quadrant LED Wall — roughly ${pd.toLocaleString('en-GB')} plays per day (during opening hours).`;
       } else {
         const plays = Math.floor(b / RATE_PT);
         const pd    = Math.floor(plays / days);
-        msg = `With a £${b.toLocaleString('en-GB')} budget over ${tf}, your ad plays ${plays.toLocaleString('en-GB')} times across the Parc Tawe D6 Screens — roughly ${pd.toLocaleString('en-GB')} plays per day.`;
+        msg = `With a £${b.toLocaleString('en-GB')} budget over ${tf}, your ad plays ${plays.toLocaleString('en-GB')} times across both Parc Tawe D6 Screens — roughly ${pd.toLocaleString('en-GB')} plays per day (during opening hours).`;
       }
       sumEl.textContent = msg;
       sumEl.classList.add('visible');
